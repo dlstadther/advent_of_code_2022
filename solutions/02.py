@@ -1,9 +1,5 @@
 from pathlib import Path
-
-filepath = Path(__file__).resolve()
-filename_no_ext = filepath.name.split('.')[0]
-filedir = filepath.parent
-input_file = filedir / f"../inputs/{filename_no_ext}.txt"
+from typing import List
 
 
 class Choice:
@@ -85,16 +81,33 @@ class RockPaperScissors:
         self.score_round(player_1_choice=player_1_choice, player_2_choice=player_2_choice)
 
 
-if __name__ == "__main__":
-    game_1 = RockPaperScissors()
-    game_2 = RockPaperScissors()
+def read_input() -> List[str]:
+    filepath = Path(__file__).resolve()
+    filename_no_ext = filepath.name.split('.')[0]
+    filedir = filepath.parent
+    input_file = filedir / f"../inputs/{filename_no_ext}.txt"
     with open(input_file, "r") as infile:
-        for line in infile:
-            line = line.strip()
-            if line is None:
-                continue
-            input_elf, input_me = line.split()
-            game_1.play_round_1(player_1_input=input_elf, player_2_input=input_me)
-            game_2.play_round_2(player_1_input=input_elf, player_2_input=input_me)
-    print(game_1.score)  # 13446 - correct
-    print(game_2.score)  # 13509 - correct
+        input = infile.readlines()
+    return [line.strip() for line in input]
+
+
+def run_part_1(input: List[str]) -> int:
+    game_1 = RockPaperScissors()
+    for line in input:
+        input_elf, input_me = line.split()
+        game_1.play_round_1(player_1_input=input_elf, player_2_input=input_me)
+    return game_1.score
+
+
+def run_part_2(input: List[str]) -> int:
+    game_2 = RockPaperScissors()
+    for line in input:
+        input_elf, input_me = line.split()
+        game_2.play_round_2(player_1_input=input_elf, player_2_input=input_me)
+    return game_2.score
+
+
+if __name__ == "__main__":
+    input = read_input()
+    print(run_part_1(input))  # 13446 - correct
+    print(run_part_2(input))  # 13509 - correct

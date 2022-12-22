@@ -1,5 +1,4 @@
 from pathlib import Path
-from typing import List
 
 
 class Choice:
@@ -38,10 +37,22 @@ class RockPaperScissors:
         scissors.wins_against = paper
         scissors.loses_against = rock
 
-        self.round_1_key = {"A": rock, "B": paper, "C": scissors,
-                            "X": rock, "Y": paper, "Z": scissors}
-        self.round_2_key = {"A": rock, "B": paper, "C": scissors,
-                            "X": "lose", "Y": "draw", "Z": "win"}
+        self.round_1_key = {
+            "A": rock,
+            "B": paper,
+            "C": scissors,
+            "X": rock,
+            "Y": paper,
+            "Z": scissors,
+        }
+        self.round_2_key = {
+            "A": rock,
+            "B": paper,
+            "C": scissors,
+            "X": "lose",
+            "Y": "draw",
+            "Z": "win",
+        }
 
         self.score = 0
 
@@ -81,17 +92,17 @@ class RockPaperScissors:
         self.score_round(player_1_choice=player_1_choice, player_2_choice=player_2_choice)
 
 
-def read_input() -> List[str]:
+def read_input() -> list[str]:
     filepath = Path(__file__).resolve()
-    filename_no_ext = filepath.name.split('.')[0]
+    filename_no_ext = filepath.name.split(".")[0]
     filedir = filepath.parent
     input_file = filedir / f"../inputs/{filename_no_ext}.txt"
-    with open(input_file, "r") as infile:
+    with open(input_file) as infile:
         input = infile.readlines()
     return [line.strip() for line in input]
 
 
-def run_part_1(input: List[str]) -> int:
+def run_part_1(input: list[str]) -> int:
     game_1 = RockPaperScissors()
     for line in input:
         input_elf, input_me = line.split()
@@ -99,7 +110,7 @@ def run_part_1(input: List[str]) -> int:
     return game_1.score
 
 
-def run_part_2(input: List[str]) -> int:
+def run_part_2(input: list[str]) -> int:
     game_2 = RockPaperScissors()
     for line in input:
         input_elf, input_me = line.split()

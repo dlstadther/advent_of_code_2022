@@ -1,23 +1,23 @@
+from collections.abc import Generator
 from pathlib import Path
-from typing import Generator, List, Set, Tuple
 
 
-def read_input() -> List[str]:
+def read_input() -> list[str]:
     filepath = Path(__file__).resolve()
-    filename_no_ext = filepath.name.split('.')[0]
+    filename_no_ext = filepath.name.split(".")[0]
     filedir = filepath.parent
     input_file = filedir / f"../inputs/{filename_no_ext}.txt"
-    with open(input_file, "r") as infile:
+    with open(input_file) as infile:
         input = infile.readlines()
     return [line.strip() for line in input]
 
 
-def get_compartments(line: str) -> Tuple[str, str]:
+def get_compartments(line: str) -> tuple[str, str]:
     position = len(line) // 2
     return line[:position], line[position:]
 
 
-def find_intersection(*sets: Set) -> Set:
+def find_intersection(*sets: set) -> set:
     return set.intersection(*sets)
 
 
@@ -32,16 +32,14 @@ def char_to_priority(char: str) -> int:
     return value
 
 
-def run_part_1(input: List[str]) -> int:
-    total_priority = sum([
-        char_to_priority(find_intersection(
-            *[set(comp) for comp in get_compartments(line)]
-        ).pop()) for line in input
-    ])
+def run_part_1(input: list[str]) -> int:
+    total_priority = sum(
+        [char_to_priority(find_intersection(*[set(comp) for comp in get_compartments(line)]).pop()) for line in input]
+    )
     return total_priority
 
 
-def group_rucksacks(input: List[str]) -> Generator[str, None, None]:
+def group_rucksacks(input: list[str]) -> Generator[str, None, None]:
     group_size = 3
     for index in range(0, len(input) + 1 - group_size, group_size):
         start_index = index
@@ -49,7 +47,7 @@ def group_rucksacks(input: List[str]) -> Generator[str, None, None]:
         yield input[start_index:end_index]
 
 
-def run_part_2(input: List[str]) -> int:
+def run_part_2(input: list[str]) -> int:
     total_priority = 0
     for rucksacks in group_rucksacks(input):
         rucksack_sets = [set(r) for r in rucksacks]

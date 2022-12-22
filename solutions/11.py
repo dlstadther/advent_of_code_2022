@@ -1,15 +1,14 @@
 from pathlib import Path
-from typing import Dict, List, Tuple
 
 
 class Monkey:
     def __init__(
-            self,
-            name: int,
-            items: List[int],
-            operation: str,
-            test_divisor: int,
-            recipient_index: Tuple[int, int],  # (False, True)
+        self,
+        name: int,
+        items: list[int],
+        operation: str,
+        test_divisor: int,
+        recipient_index: tuple[int, int],  # (False, True)
     ):
         self.name = name
         self.items = items
@@ -30,7 +29,7 @@ class Monkey:
 
 
 class MonkeyInTheMiddle:
-    def __init__(self, monkeys: Dict[int, Monkey], worry_divisor: int = 1):
+    def __init__(self, monkeys: dict[int, Monkey], worry_divisor: int = 1):
         self.monkeys = monkeys
         self.worry_divisor = worry_divisor
 
@@ -51,13 +50,13 @@ class MonkeyInTheMiddle:
         """
         monkey.qty_items_inspected += 1
         index = 0
-        old = monkey.items[index]
+        old = monkey.items[index]  # noqa: F841
         new = eval(f"{monkey.operation}")
         new //= self.worry_divisor
         new %= self.super_test
         monkey.items[index] = new
 
-    def throw(self, monkey: Monkey) -> Tuple[int, int]:
+    def throw(self, monkey: Monkey) -> tuple[int, int]:
         """Throws item [0] to monkey [1]...
         Test
         Throw (based on true/false result)
@@ -80,23 +79,23 @@ class MonkeyInTheMiddle:
             self.apply_round()
 
 
-def read_input() -> List[str]:
+def read_input() -> list[str]:
     filepath = Path(__file__).resolve()
-    filename_no_ext = filepath.name.split('.')[0]
+    filename_no_ext = filepath.name.split(".")[0]
     filedir = filepath.parent
     input_file = filedir / f"../inputs/{filename_no_ext}.txt"
-    with open(input_file, "r") as infile:
+    with open(input_file) as infile:
         input = infile.readlines()
     return [line.strip() for line in input]
 
 
-def initialize_game(input: List[str], worry_divisor: int) -> MonkeyInTheMiddle:
+def initialize_game(input: list[str], worry_divisor: int) -> MonkeyInTheMiddle:
     offset = 7
-    monkeys_input = [input[i:i + offset] for i in range(0, len(input), offset)]
+    monkeys_input = [input[i : i + offset] for i in range(0, len(input), offset)]
 
-    monkeys: Dict[int, Monkey] = dict()
+    monkeys: dict[int, Monkey] = dict()
     for monkey_input in monkeys_input:
-        name, items, operation, test, if_true, if_false, *remainder = [line.strip() for line in monkey_input]
+        name, items, operation, test, if_true, if_false, *remainder = (line.strip() for line in monkey_input)
 
         name = int(name.split()[-1].split(":")[0])
         items = [int(v.strip()) for v in items.split("Starting items:")[1].split(",")]
@@ -117,7 +116,7 @@ def initialize_game(input: List[str], worry_divisor: int) -> MonkeyInTheMiddle:
     return game
 
 
-def run_part_1(input: List[str]) -> int:
+def run_part_1(input: list[str]) -> int:
     qty_rounds = 20
     game = initialize_game(input, worry_divisor=3)
     game.simulate_rounds(qty=qty_rounds)
@@ -126,7 +125,7 @@ def run_part_1(input: List[str]) -> int:
     return inspection_qty_desc[0] * inspection_qty_desc[1]
 
 
-def run_part_2(input: List[str]) -> int:
+def run_part_2(input: list[str]) -> int:
     qty_rounds = 10000
     game = initialize_game(input, worry_divisor=1)
     game.simulate_rounds(qty=qty_rounds)

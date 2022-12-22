@@ -1,6 +1,5 @@
-from pathlib import Path
 import re
-from typing import Dict, List
+from pathlib import Path
 
 
 class File:
@@ -13,8 +12,8 @@ class Directory:
     def __init__(self, name: str, parent: "Directory" = None):
         self.name = name
         self.parent = parent
-        self.files: Dict[str, File] = dict()
-        self.directories: Dict[str, "Directory"] = dict()
+        self.files: dict[str, File] = dict()
+        self.directories: dict[str, "Directory"] = dict()
 
     @property
     def size(self) -> int:
@@ -57,12 +56,12 @@ class Directory:
             return f"{self.__class__.__name__}(name={self.name}, size={self.size})"
 
 
-def read_input() -> List[str]:
+def read_input() -> list[str]:
     filepath = Path(__file__).resolve()
-    filename_no_ext = filepath.name.split('.')[0]
+    filename_no_ext = filepath.name.split(".")[0]
     filedir = filepath.parent
     input_file = filedir / f"../inputs/{filename_no_ext}.txt"
-    with open(input_file, "r") as infile:
+    with open(input_file) as infile:
         input = infile.readlines()
     return [line.strip() for line in input]
 
@@ -71,7 +70,7 @@ def read_input() -> List[str]:
 #     return bool(input.startswith("$ "))
 
 
-def generate_filesystem_from_commands(input: List[str]) -> Directory:
+def generate_filesystem_from_commands(input: list[str]) -> Directory:
     regex_cd_dir = re.compile(r"\$ cd (?P<name>.*)")
     regex_ls_item = re.compile(r"(?P<dir_or_size>dir|\d.*) (?P<name>.*)")
     root_dir: Directory = None
@@ -111,10 +110,10 @@ def generate_filesystem_from_commands(input: List[str]) -> Directory:
     return root_dir
 
 
-def get_dirs(root_dir: Directory) -> List[Directory]:
+def get_dirs(root_dir: Directory) -> list[Directory]:
     # effectively a tree/graph traversal algorithm
-    dirs: List[Directory] = list()
-    dirs_to_visit: List[Directory] = [root_dir]
+    dirs: list[Directory] = list()
+    dirs_to_visit: list[Directory] = [root_dir]
 
     while dirs_to_visit:
         tmp_dir = dirs_to_visit.pop(0)
@@ -125,7 +124,7 @@ def get_dirs(root_dir: Directory) -> List[Directory]:
     return dirs
 
 
-def run_part_1(input: List[str]) -> int:
+def run_part_1(input: list[str]) -> int:
     root_dir = generate_filesystem_from_commands(input=input)
     dirs = get_dirs(root_dir=root_dir)
     dirs_sorted = sorted(dirs)
@@ -138,7 +137,7 @@ def run_part_1(input: List[str]) -> int:
     return total_size
 
 
-def run_part_2(input: List[str]) -> int:
+def run_part_2(input: list[str]) -> int:
     max_fs_size = 70000000
     min_unused_size = 30000000
     root_dir = generate_filesystem_from_commands(input=input)

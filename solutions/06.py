@@ -1,14 +1,13 @@
 from collections import deque
 from pathlib import Path
-from typing import List
 
 
-def read_input() -> List[str]:
+def read_input() -> list[str]:
     filepath = Path(__file__).resolve()
-    filename_no_ext = filepath.name.split('.')[0]
+    filename_no_ext = filepath.name.split(".")[0]
     filedir = filepath.parent
     input_file = filedir / f"../inputs/{filename_no_ext}.txt"
-    with open(input_file, "r") as infile:
+    with open(input_file) as infile:
         input = infile.readlines()
     return [line.strip() for line in input]
 
@@ -24,11 +23,11 @@ def find_packet_start_index(signal: str, unique_sequence_len: int) -> int:
             return index
 
 
-def run_part_1(input: List[str]) -> int:
+def run_part_1(input: list[str]) -> int:
     return find_packet_start_index(signal=input[0], unique_sequence_len=4)
 
 
-def run_part_2(input: List[str]) -> int:
+def run_part_2(input: list[str]) -> int:
     return find_packet_start_index(signal=input[0], unique_sequence_len=14)
 
 
